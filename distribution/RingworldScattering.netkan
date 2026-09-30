@@ -1,0 +1,26 @@
+{
+  "spec_version": "v1.4",
+  "identifier": "RingworldScattering",
+  "name": "Ringworld Scattering",
+  "abstract": "Enhanced water surfaces, underwater scattering and distant full-ring atmosphere for Niven's Ringworld.",
+  "author": "theplatecrafter",
+  "license": "MIT",
+  "$kref": "#/ckan/github/theplatecrafter/Ringworld-Scattering-KSP",
+  "ksp_version": "1.12.5",
+  "depends": [
+    {
+      "name": "NivenRingworld",
+      "version": "1.1.5"
+    }
+  ],
+  "install": [
+    {
+      "file": "GameData/RingworldScattering",
+      "install_to": "GameData"
+    }
+  ],
+  "resources": {
+    "repository": "https://github.com/theplatecrafter/Ringworld-Scattering-KSP",
+    "bugtracker": "https://github.com/theplatecrafter/Ringworld-Scattering-KSP/issues"
+  }
+}

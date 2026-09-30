@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+artifacts/
+.tools/
+**/Library/
+**/Logs/
+**/Temp/
+**/UserSettings/
+
+**/__pycache__/
