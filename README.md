@@ -29,3 +29,7 @@ Cyla is optional and independent: it can provide the local atmospheric rendering
 ## Uninstalling
 
 Close KSP and remove only `GameData/RingworldScattering`. The base mod retains the ring and its gameplay. Back up saves before changing any mod installation.
+
+## In-game controls
+
+In the Ringworld panel, open **Extensions** and expand **Ringworld Scattering**. Installed extensions are enabled by default; a saved disabled choice is respected. The top switch applies immediately. Save your game to retain your choice. Quality presets still control rendering cost. These controls are provided by the base mod v1.1.5 control-panel update.
