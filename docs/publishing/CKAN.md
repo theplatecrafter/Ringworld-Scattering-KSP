@@ -1,6 +1,6 @@
 # CKAN metadata
 
-The proposed identifier is `RingworldScattering`. Submit `distribution/RingworldScattering.netkan` to the NetKAN maintainers after the GitHub release is available. The file uses the GitHub release as its download source and installs only `GameData/RingworldScattering`.
+The proposed identifier is `RingworldScattering`. Submit the sibling `NetKAN/NetKAN/RingworldScattering.netkan` to the NetKAN maintainers after the GitHub release is available. The file uses the SpaceDock listing as its download source and installs only `GameData/RingworldScattering`.
 
 Version 1.0.0 requires **NivenRingworld 1.1.5 exactly** because this first release shares a version-paired rendering interface with the base. Harmony is required through the base dependency. Cyla and the other Ringworld extension are optional. No dependency is bundled in the ZIP.
 
