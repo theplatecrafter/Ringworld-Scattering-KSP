@@ -21,8 +21,8 @@ namespace NivenRingworld.Extensions
                 {
                     material.shader=shader;refracting=shader.name=="NivenRingworld/WaterRefraction";
                     material.SetVector("_WaveCamera",(Vector3)(star+ConvertVector.Ksp(observer)));
-                    material.SetVector("_WaveAlong",ConvertVector.Unity(settings.Geometry.SpinVelocity(observer).Unit));
-                    material.SetVector("_WaveAcross",Vector3.up);material.SetVector("_WaveUp",ConvertVector.Unity(settings.Geometry.Up(observer)));
+                    material.SetVector("_WaveAlong",ConvertVector.Unity(settings.Geometry.AlongDirection(observer)));
+                    material.SetVector("_WaveAcross",ConvertVector.Unity(settings.Geometry.Axis));material.SetVector("_WaveUp",ConvertVector.Unity(settings.Geometry.Up(observer)));
                     double time=Planetarium.GetUniversalTime();
                     material.SetFloat("_WaterScattering",settings.WaterScattering?1:0);
                     material.SetVector("_WaterOpticsChart",new Vector4((float)RingGeometry.Wrap(p.Along,Math.PI*200),(float)RingGeometry.Wrap(p.Across,Math.PI*200),(float)RingGeometry.Wrap(time*.35,Math.PI*200),0));
@@ -40,14 +40,14 @@ namespace NivenRingworld.Extensions
                     material.SetVectorArray("_SeaWaves",spectrum);material.SetFloat("_SeaCount",count);
                     material.SetFloat("_SeaWind",(float)(.4+weather.Storm*.6));
                     var lightPosition=settings.Body!=null?settings.Body.position:star;
-                    material.SetVector("_WaveSun",((Vector3)(lightPosition-star-ConvertVector.Ksp(observer))).normalized);
+                    material.SetVector("_WaveSun",ConvertVector.Unity(RingLighting.Direction(settings,observer,time)));
 
                     material.SetVector("_Wave",new Vector4(0,0,0,waterQuality>=2?(float)settings.WaveHeight:0));
                     Func<double,float> phase=a=>(float)RingGeometry.Wrap(a,Math.PI*2);
                     material.SetVector("_WavePhase",new Vector4(phase(p.Along*.037+p.Across*.012-time*1.1),phase(-p.Along*.016+p.Across*.029-time*.8),phase(p.Along*.063-p.Across*.054-time*1.7),0));
                     material.SetVector("_RipplePhase",new Vector4(phase(p.Along*1.7+p.Across*.64-time*2),phase(p.Across*1.3-p.Along*.92+time*1.6),phase(p.Along*5+p.Across*3.1+time*2.4),phase(p.Across*4.2-p.Along*3.7-time*2.1)));
                     material.SetVector("_NoiseOffset",new Vector4((float)RingGeometry.Wrap(p.Along,65536),(float)RingGeometry.Wrap(p.Across,65536),(float)RingGeometry.Wrap(time*.15,65536),0));
-                    material.SetFloat("_WaterLight",(float)settings.Geometry.Daylight(p.Along,time));material.SetFloat("_WaterQuality",waterQuality);
+                    material.SetFloat("_WaterLight",(float)settings.Geometry.Daylight(p.Along,time,p.Across,p.Altitude));material.SetFloat("_WaterQuality",waterQuality);
                 }
                 else material.shader=fallback;
             }

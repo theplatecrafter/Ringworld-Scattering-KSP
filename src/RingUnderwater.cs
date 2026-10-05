@@ -38,11 +38,11 @@ namespace NivenRingworld.Extensions
                 else {if(bundle!=null){ExtensionAssets.Release();bundle=null;}Graphics.Blit(source,destination);return;}
             }
             double time=Planetarium.GetUniversalTime();float tangent=Mathf.Tan(view.fieldOfView*Mathf.Deg2Rad*.5f);
-            material.SetVector("_WaterOptics",new Vector4((float)depth,(float)s.Geometry.Daylight(c.Along,time),s.WaterScattering?s.WaterQuality:0,(float)Ringworld.Core.RingGeometry.Wrap(time*.35,System.Math.PI*200)));
+            material.SetVector("_WaterOptics",new Vector4((float)depth,(float)s.Geometry.Daylight(c.Along,time,c.Across,c.Altitude),s.WaterScattering?s.WaterQuality:0,(float)Ringworld.Core.RingGeometry.Wrap(time*.35,System.Math.PI*200)));
             material.SetVector("_WaterChart",new Vector4((float)Ringworld.Core.RingGeometry.Wrap(c.Along,System.Math.PI*200),(float)Ringworld.Core.RingGeometry.Wrap(c.Across,System.Math.PI*200),0,0));
-            material.SetVector("_WaterAlong",ConvertVector.Unity(s.Geometry.SpinVelocity(point).Unit));material.SetVector("_WaterAcross",Vector3.up);
+            material.SetVector("_WaterAlong",ConvertVector.Unity(s.Geometry.AlongDirection(point)));material.SetVector("_WaterAcross",ConvertVector.Unity(s.Geometry.Axis));
             material.SetVector("_WaterUp",ConvertVector.Unity(s.Geometry.Up(point)));
-            material.SetVector("_WaterSun",((Vector3)((s.Body==null?f.Center:s.Body.position)-(Vector3d)view.transform.position)).normalized);
+            material.SetVector("_WaterSun",ConvertVector.Unity(RingLighting.Direction(s,point,time)));
             material.SetVector("_ViewForward",view.transform.forward);material.SetVector("_ViewRight",view.transform.right*tangent*view.aspect);material.SetVector("_ViewUp",view.transform.up*tangent);
             Graphics.Blit(source,destination,material);
         }

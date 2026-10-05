@@ -5,10 +5,12 @@ Shader "NivenRingworld/FullRingAtmosphere"
  CGPROGRAM
  #pragma vertex vert
  #pragma fragment frag
- #pragma target 3.0
+ #pragma target 5.0
  #include "UnityCG.cginc"
+#include "RingEclipse.cginc"
  #include "RingHullOcclusion.cginc"
  float4 _RingSize;
+ float _PanelsDisabled;
  float _DayPhase,_Haze,_Exposure,_LocalBlend,_Detail;
  struct a {float4 vertex:POSITION;float2 uv:TEXCOORD0;};
  struct v {float4 vertex:SV_POSITION;float3 local:TEXCOORD0;float2 uv:TEXCOORD1;};
@@ -26,7 +28,7 @@ Shader "NivenRingworld/FullRingAtmosphere"
    float grazing=sqrt(max(.00001,16000*_RingSize.z/max(_RingSize.x,1)));
    float column=1/max(grazing,max(.035,cosine));
    float phase=frac(20*i.uv.x-_DayPhase),edge=min(phase,1-phase);
-   float light=smoothstep(.138307,.158307,edge);
+   float light=lerp(smoothstep(.138307,.158307,edge),1,_PanelsDisabled);
    float rim=smoothstep(0,.002,min(i.uv.y,1-i.uv.y));
    float optical=min(5,column*.12*max(0,_Haze));
    float alpha=(1-exp(-optical))*handoff*rim*light;
