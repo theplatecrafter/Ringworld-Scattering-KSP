@@ -2,7 +2,7 @@
 
 ## The extension is not listed in Ringworld settings
 
-Confirm that the base is version 1.1.5, this extension is version 1.0.0, and its DLL is in `GameData/RingworldScattering/Plugins`. An extra `GameData/GameData` directory prevents assets from loading. Restart KSP after changing DLLs. Keep only one copy of each mod.
+Confirm that the base is version 1.1.7 or newer, this extension is version 1.0.1, and its DLL is in `GameData/RingworldScattering/Plugins`. An extra `GameData/GameData` directory prevents assets from loading. Restart KSP after changing DLLs. Keep only one copy of each mod.
 
 ## Rendering is missing or performs poorly
 

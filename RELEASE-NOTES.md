@@ -1,11 +1,13 @@
 # Release notes
 
-## Unreleased development
+## 1.0.1 — October 5, 2026
 
-- Water wave and underwater scattering axes follow the inclination of the ring. Requires the matching development base build with inclined ring geometry.
+Requires **NivenRingworld >= 1.1.7**. Dependencies are installed separately. CKAN metadata is maintained in the dedicated NetKAN checkout.
+
+- Water wave and underwater scattering axes follow the inclination of the ring. Uses the inclined ring geometry in base 1.1.7.
 - Water and underwater illumination use the associated star's actual direction. The distant atmosphere receives physical eclipses from celestial bodies, other ring hulls, rim walls and enabled panels, through the base mod's shared eclipse data texture.
 
-The distant atmosphere respects the base mod's per-ring day/night-panel toggle. This requires the matching development base build; it is not included in the published 1.0.0 package.
+The distant atmosphere respects the base mod's per-ring day/night-panel toggle. This requires base 1.1.7 or newer.
 
 ## 1.0.0 ? September 30, 2026
 

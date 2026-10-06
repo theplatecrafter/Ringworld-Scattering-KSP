@@ -47,7 +47,7 @@ if existing and not existing['draft']:
     raise SystemExit('Release already published: ' + existing['html_url'])
 release = existing or request(base + '/releases', 'POST', {
     'tag_name': tag, 'target_commitish': commit, 'name': 'Ringworld Scattering v'+version,
-    'body': (root / 'RELEASE-NOTES.md').read_text(encoding='utf-8'),
+    'body': (root / 'RELEASE-NOTES.md').read_text(encoding='utf-8').split('## '+version,1)[1].split('\n## ',1)[0].strip(),
     'draft': True, 'prerelease': False})
 for path in (archive, checksum):
     if any(asset['name'] == path.name for asset in release['assets']):

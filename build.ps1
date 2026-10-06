@@ -14,7 +14,7 @@ if($Package){
  $taskDocs=Join-Path $taskMod 'Documentation'
  New-Item -ItemType Directory -Path $taskDocs -Force | Out-Null
  foreach($doc in @('README.md','RELEASE-NOTES.md','LICENSE','CREDITS.md','THIRD-PARTY-NOTICES.md','docs')){Copy-Item -LiteralPath (Join-Path $PSScriptRoot $doc) -Destination $taskDocs -Recurse -Force}
- $taskZip=Join-Path $PSScriptRoot 'artifacts/RingworldScattering-1.0.0.zip'
+ $taskZip=Join-Path $PSScriptRoot ('artifacts/RingworldScattering-'+([xml](Get-Content -LiteralPath (Join-Path $PSScriptRoot 'src/Ringworld.Scattering.csproj') -Raw)).Project.PropertyGroup.Version+'.zip')
  Compress-Archive -Path (Join-Path $taskStage '*') -DestinationPath $taskZip -Force
  $taskHash=(Get-FileHash -LiteralPath $taskZip -Algorithm SHA256).Hash.ToLowerInvariant()
  ($taskHash+'  '+[IO.Path]::GetFileName($taskZip)) | Set-Content -LiteralPath ($taskZip+'.sha256')
