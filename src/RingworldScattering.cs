@@ -6,7 +6,7 @@ namespace NivenRingworld.Extensions
     // Distant optical column approximation. Local Cyla/Original retains the sky integration.
     internal sealed class DistantAtmosphere : IDistantAtmosphere
     {
-        private GameObject root; private Mesh mesh; private Material material;
+        private GameObject root; private Mesh mesh; private Material material;private CameraRelativeRingMesh placement;
         internal DistantAtmosphere(Transform parent,Settings s,AssetBundle bundle)
         {
             var shader=bundle.LoadAsset<Shader>("Assets/Shaders/FullRingAtmosphere.shader");
@@ -14,13 +14,14 @@ namespace NivenRingworld.Extensions
             material=new Material(shader);
             root=new GameObject("Ringworld full-ring atmosphere");root.layer=10;root.transform.SetParent(parent,false);
             const int count=16384;
-            var vertices=new Vector3[(count+1)*2];var uv=new Vector2[vertices.Length];var indices=new int[count*6];
+            var precise=new DVec[(count+1)*2];var vertices=new Vector3[precise.Length];var uv=new Vector2[vertices.Length];var indices=new int[count*6];
             var geometry=new RingGeometry(s.Geometry.P);
             for(int i=0;i<=count;i++)
             {
                 for(int j=0;j<2;j++)
                 {
-                    vertices[i*2+j]=ConvertVector.Unity(geometry.Position(i*s.Geometry.P.Circumference/count,(j-.5)*s.Geometry.P.Width,30000)*ScaledSpace.InverseScaleFactor);
+                    precise[i*2+j]=geometry.Position(i*s.Geometry.P.Circumference/count,(j-.5)*s.Geometry.P.Width,30000)*ScaledSpace.InverseScaleFactor;
+                    vertices[i*2+j]=ConvertVector.Unity(precise[i*2+j]);
                     uv[i*2+j]=new Vector2((float)i/count,j);
                 }
                 if(i==count)continue;
@@ -31,6 +32,7 @@ namespace NivenRingworld.Extensions
             root.AddComponent<MeshFilter>().sharedMesh=mesh;
             var renderer=root.AddComponent<MeshRenderer>();renderer.sharedMaterial=material;
             renderer.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;renderer.receiveShadows=false;
+            placement=new CameraRelativeRingMesh(root,mesh,material,precise,s);
         }
         public void Update(Settings s,double time)
         {
@@ -50,6 +52,7 @@ namespace NivenRingworld.Extensions
         }
         public void Dispose()
         {
+            if(placement!=null)placement.Dispose();
             if(root!=null)UnityEngine.Object.Destroy(root);
             if(mesh!=null)UnityEngine.Object.Destroy(mesh);
             if(material!=null)UnityEngine.Object.Destroy(material);

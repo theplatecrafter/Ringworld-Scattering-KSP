@@ -1,5 +1,13 @@
 # Release notes
 
+## Unreleased ? map-camera alignment
+
+The full-ring atmosphere uploads camera-relative geometry immediately before each scaled-space camera render. Ring coordinates remain in double precision until upload, and grazing optical distance uses the relative position directly. This addresses camera-motion lag and precision differences between the atmosphere and the base ring surface in Map View and Tracking Station.
+
+Requires a matching base-mod build containing `CameraRelativeRingMesh`; the released base 1.1.7 binary does not contain that helper. The release owner must assign the next base/extension versions and require that new base version in NetKAN before publishing this extension. KSP 1.12.5 and Harmony through the base remain required. Cyla and Ringworld Clouds remain optional; no dependencies are bundled. Installation remains `GameData/RingworldScattering`, extracted from the KSP root. No artifact or publication has been made for these changes.
+
+Validation: the extension and shader bundle compile. Runtime checks are tracked in the base project's `docs/developers/MAP-RENDERING.md`.
+
 ## 1.0.1 — October 5, 2026
 
 Requires **NivenRingworld >= 1.1.7**. Dependencies are installed separately. CKAN metadata is maintained in the dedicated NetKAN checkout.

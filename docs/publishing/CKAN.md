@@ -1,5 +1,11 @@
 # CKAN metadata
 
+## Development and release ownership
+
+The [workspace workflow](../../../AGENTS.md) governs local development. The development assistant edits ordinary files, builds and tests locally, and packages ZIPs only when requested. All Git operations, GitHub/SpaceDock publication, and NetKAN pull requests are handled by the project owner. Publishing steps below are instructions for the owner, not authorization for automated publication.
+
+Each component's `RELEASE-NOTES.md` must report required dependencies and version constraints, optional/suggested integrations, configuration-provider conflicts, installation layout, and validation limits for the version being prepared. Configuration release notes must distinguish the requirements of all four packs.
+
 The proposed identifier is `RingworldScattering`. Submit the sibling `NetKAN/NetKAN/RingworldScattering.netkan` to the NetKAN maintainers after the GitHub release is available. The file uses the SpaceDock listing as its download source and installs only `GameData/RingworldScattering`.
 
 Version 1.0.1 requires **NivenRingworld >= 1.1.7** because it uses the base rendering interface. Harmony is required through the base dependency. Cyla and the other Ringworld extension are optional. No dependency is bundled in the ZIP.

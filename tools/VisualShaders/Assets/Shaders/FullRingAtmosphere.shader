@@ -9,17 +9,17 @@ Shader "NivenRingworld/FullRingAtmosphere"
  #include "UnityCG.cginc"
 #include "RingEclipse.cginc"
  #include "RingHullOcclusion.cginc"
- float4 _RingSize;
+ float4 _RingSize;float _RingCameraRelative;float3 _RingCameraLocal;float4x4 _RingToChart;
  float _PanelsDisabled;
  float _DayPhase,_Haze,_Exposure,_LocalBlend,_Detail;
  struct a {float4 vertex:POSITION;float2 uv:TEXCOORD0;};
- struct v {float4 vertex:SV_POSITION;float3 local:TEXCOORD0;float2 uv:TEXCOORD1;};
- v vert(a i){v o;o.vertex=UnityObjectToClipPos(i.vertex);o.local=i.vertex.xyz;o.uv=i.uv;return o;}
+ struct v {float4 vertex:SV_POSITION;float3 local:TEXCOORD0;float3 relative:TEXCOORD2;float2 uv:TEXCOORD1;};
+ v vert(a i){v o;o.vertex=UnityObjectToClipPos(i.vertex);o.relative=mul((float3x3)_RingToChart,i.vertex.xyz);o.local=_RingCameraRelative>.5?o.relative+_RingCameraLocal:i.vertex.xyz;o.uv=i.uv;return o;}
  float4 frag(v i):SV_Target
  {
-   float3 camera=mul(unity_WorldToObject,float4(_WorldSpaceCameraPos,1)).xyz;
+   float3 camera=_RingCameraRelative>.5?_RingCameraLocal:mul(unity_WorldToObject,float4(_WorldSpaceCameraPos,1)).xyz;
    if(ringHullOccludes(camera,i.local,_RingSize.x,_RingSize.y))discard;
-   float3 delta=camera-i.local;
+   float3 delta=_RingCameraRelative>.5?-i.relative:camera-i.local;
    float distanceMetres=length(delta)/max(_RingSize.z,1e-12);
    float handoff=lerp(1,smoothstep(250000,600000,distanceMetres),_LocalBlend);
    float3 normal=normalize(float3(-i.local.x,0,-i.local.z));
