@@ -1,5 +1,25 @@
 # Release notes
 
+## 1.0.2 - artifacts prepared October 9, 2026
+
+Coordinated with NivenRingworld >= 1.1.8. Includes camera-relative full-ring atmosphere alignment and exterior-hull occlusion, plus the current water refraction/absorption, above/below-water scattering and underwater light implementation. Source/shader validation history follows below. No upstream Scatterer dependency or asset bundle is included.
+
+Required: NivenRingworld min_version 1.1.8; KSP 1.12.5 Windows x64 / D3D11. The base supplies Harmony2 >=2.2.1.0, ModuleManager and a selected config. No additional required mod. RingworldClouds, Cyla and RingworldParallax are optional. Dependency change from 1.0.1: raise minimum base from 1.1.7 to 1.1.8 for the new camera/exterior API. Owner should update NetKAN with min_version, not an exact-version dependency; metadata is unchanged locally.
+
+Standalone archive merges GameData/RingworldScattering at the KSP root and includes documentation. No dependencies bundled; no publication. Existing ring geometry, water levels and save format are unchanged. Higher-preset desktop performance remains unverified.
+
+## Unreleased - manual modpack inclusion
+
+The current local Scattering DLL/shaders are included with the matching base, Clouds and full-size interstellar config in the sibling `Ringworld Modpacks` artifact. Harmony2, ModuleManager and Kopernicus's required stack are bundled only in that explicitly requested combined pack. Standalone Scattering packaging remains dependency-free. External dependencies and component versions are unchanged; no NetKAN edit or publication. See the modpack release notes for assembled-pack validation.
+
+## Unreleased - exterior hull occlusion
+
+The full-ring atmosphere respects the base mod's double-precision exterior-camera classification. A camera below the scrith hull within its width no longer sees the interior atmosphere overlay. Views into the habitat through an open rim retain the existing ray/hull visibility tests.
+
+Install this updated shader bundle with the matching development base DLL and visual bundle. Released base 1.1.7 does not provide the exterior flag; this correction belongs to the next coordinated base/extension release. KSP 1.12.5 and Harmony through the base remain required; Cyla and Ringworld Clouds remain optional. There are no new dependencies, NetKAN changes, packaged archives or publications. Installation remains `GameData/RingworldScattering`.
+
+Local runtime validation on October 8 passed the full-ring atmosphere's interior-visible/exterior-hidden GPU probe and an actual scaled-space exterior camera view. The latter retained dark scrith with no bright habitat layers. Flight checks used Slow on Windows/Direct3D 11; see the base mod's terrain texture validation for the diagnostic log and scope.
+
 ## Unreleased ? map-camera alignment
 
 The full-ring atmosphere uploads camera-relative geometry immediately before each scaled-space camera render. Ring coordinates remain in double precision until upload, and grazing optical distance uses the relative position directly. This addresses camera-motion lag and precision differences between the atmosphere and the base ring surface in Map View and Tracking Station.

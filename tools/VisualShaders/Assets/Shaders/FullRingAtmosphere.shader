@@ -9,7 +9,7 @@ Shader "NivenRingworld/FullRingAtmosphere"
  #include "UnityCG.cginc"
 #include "RingEclipse.cginc"
  #include "RingHullOcclusion.cginc"
- float4 _RingSize;float _RingCameraRelative;float3 _RingCameraLocal;float4x4 _RingToChart;
+ float4 _RingSize;float _RingCameraRelative,_RingCameraExterior;float3 _RingCameraLocal;float4x4 _RingToChart;
  float _PanelsDisabled;
  float _DayPhase,_Haze,_Exposure,_LocalBlend,_Detail;
  struct a {float4 vertex:POSITION;float2 uv:TEXCOORD0;};
@@ -18,7 +18,7 @@ Shader "NivenRingworld/FullRingAtmosphere"
  float4 frag(v i):SV_Target
  {
    float3 camera=_RingCameraRelative>.5?_RingCameraLocal:mul(unity_WorldToObject,float4(_WorldSpaceCameraPos,1)).xyz;
-   if(ringHullOccludes(camera,i.local,_RingSize.x,_RingSize.y))discard;
+   if(_RingCameraExterior>.5||ringHullOccludes(camera,i.local,_RingSize.x,_RingSize.y))discard;
    float3 delta=_RingCameraRelative>.5?-i.relative:camera-i.local;
    float distanceMetres=length(delta)/max(_RingSize.z,1e-12);
    float handoff=lerp(1,smoothstep(250000,600000,distanceMetres),_LocalBlend);

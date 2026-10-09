@@ -6,6 +6,7 @@ $taskStage=Join-Path $PSScriptRoot ('artifacts/stage-'+[Guid]::NewGuid().ToStrin
 $taskMod=Join-Path $taskStage 'GameData/RingworldScattering'
 New-Item -ItemType Directory -Path $taskMod -Force | Out-Null
 Copy-Item -Path (Join-Path $PSScriptRoot 'GameData/RingworldScattering/*') -Destination $taskMod -Recurse -Force
+Get-ChildItem -LiteralPath $taskMod -Filter '*.build.json' -Recurse -File | ForEach-Object {Remove-Item -LiteralPath $_.FullName -Force}
 New-Item -ItemType Directory -Path (Join-Path $taskMod 'Plugins') -Force | Out-Null
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src/bin/Release/net472/Ringworld.Scattering.dll') -Destination (Join-Path $taskMod 'Plugins') -Force
 if(-not(Test-Path -LiteralPath (Join-Path $taskMod 'Assets/ringworldscattering'))){throw 'Build shaders with build-visuals.ps1 first.'}
