@@ -1,6 +1,7 @@
-param([string]$KspRoot=(Join-Path (Split-Path -Parent $PSScriptRoot) 'template_instance'),[string]$RingworldRoot=(Join-Path (Split-Path -Parent $PSScriptRoot) 'Ring World KSP'),[switch]$Install,[switch]$Package)
+param([string]$KspRoot=(Join-Path (Split-Path -Parent $PSScriptRoot) 'template_instance'),[string]$RingworldRoot=(Join-Path (Split-Path -Parent $PSScriptRoot) 'Ring World KSP'),[switch]$Install,[switch]$Package,[switch]$SmokeTest)
 $ErrorActionPreference='Stop'
-& dotnet build (Join-Path $PSScriptRoot 'src/Ringworld.Scattering.csproj') -c Release --nologo "-p:KspRoot=$KspRoot" "-p:RingworldRoot=$RingworldRoot"
+if($Package -and $SmokeTest){throw 'A profiling build cannot be packaged for release.'}
+& dotnet build (Join-Path $PSScriptRoot 'src/Ringworld.Scattering.csproj') -c Release --nologo "-p:KspRoot=$KspRoot" "-p:RingworldRoot=$RingworldRoot" "-p:SmokeTest=$($SmokeTest.IsPresent.ToString().ToLowerInvariant())"
 if($LASTEXITCODE -ne 0){throw 'Extension build failed; build the base mod first.'}
 $taskStage=Join-Path $PSScriptRoot ('artifacts/stage-'+[Guid]::NewGuid().ToString('N'))
 $taskMod=Join-Path $taskStage 'GameData/RingworldScattering'

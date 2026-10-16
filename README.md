@@ -1,5 +1,7 @@
 # Ringworld Scattering
 
+Version **1.0.3**. [Player-facing release notes](docs/releases/v1.0.3.md).
+
 Enhanced water surfaces, underwater scattering and distant full-ring atmosphere for Niven's Ringworld.
 
 This optional extension requires **Niven Ringworld >= 1.1.8** and KSP 1.12.5. Install Harmony 2 (2.2.1.0 or newer) as required by the base mod. No dependencies are bundled. The base Ringworld mod works without this extension; installing it does not change terrain, water levels, gravity, science or saved vessels.

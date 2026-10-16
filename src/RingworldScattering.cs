@@ -37,8 +37,9 @@ namespace NivenRingworld.Extensions
         public void Update(Settings s,double time)
         {
             if(root==null)return;
-            RingLighting.Apply(material,s,time);
             root.SetActive(s.FullRingAtmosphere&&s.Atmosphere&&s.Haze>0);
+            if(!root.activeSelf)return;
+            RingLighting.Apply(material,s,time);
             material.SetVector("_RingSize",new Vector4((float)(s.Geometry.P.Radius*ScaledSpace.InverseScaleFactor),(float)(s.Geometry.P.Width*.5*ScaledSpace.InverseScaleFactor),(float)ScaledSpace.InverseScaleFactor,0));
             material.SetFloat("_PanelsDisabled",s.Geometry.P.PanelsEnabled?0:1);
             material.SetFloat("_DayPhase",(float)RingGeometry.Wrap(time/s.Geometry.P.DaySeconds,1));

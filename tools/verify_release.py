@@ -27,7 +27,7 @@ with zipfile.ZipFile(archive) as z:
     assert recipes, "Missing NetKAN source recipes"
     for metadata in recipes:
         assert metadata["identifier"] == mod
-        assert any(d["name"]=="NivenRingworld" and d.get("min_version")=="1.1.7" for d in metadata["depends"])
+        assert any(d["name"]=="NivenRingworld" and d.get("min_version")=="1.1.8" for d in metadata["depends"])
 
 digest=hashlib.sha256(archive.read_bytes()).hexdigest()
 assert (archive.with_suffix(".zip.sha256")).read_text(encoding="utf-8-sig").split()[0]==digest

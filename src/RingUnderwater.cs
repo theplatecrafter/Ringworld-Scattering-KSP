@@ -5,6 +5,13 @@ namespace NivenRingworld.Extensions
     // sampled mean water level; visual only, no change to buoyancy/collision.
     public sealed class UnderwaterEffect : MonoBehaviour
     {
+        private static int sampleFrame=-1;private static Ringworld.Core.TerrainGenerator sampleSource;private static double sampleAlong,sampleAcross;private static Ringworld.Core.TerrainSample sample;
+        private static Ringworld.Core.TerrainSample Terrain(Settings settings,Ringworld.Core.RingPoint point)
+        {
+            if(sampleFrame!=Time.frameCount||sampleSource!=settings.Terrain||sampleAlong!=point.Along||sampleAcross!=point.Across)
+            {sampleFrame=Time.frameCount;sampleSource=settings.Terrain;sampleAlong=point.Along;sampleAcross=point.Across;sample=settings.Terrain.Sample(point.Along,point.Across);}
+            return sample;
+        }
         private Material material;private AssetBundle bundle;private Camera view;
         internal static void Enable(bool value)
         {
@@ -14,7 +21,7 @@ namespace NivenRingworld.Extensions
             if(value&&flight!=null&&flight.FrameInUse&&!MapView.MapIsEnabled)
             {
                 var point=ConvertVector.Core((Vector3d)camera.transform.position-flight.Center);
-                var c=flight.Settings.Geometry.Coordinates(point);var t=flight.Settings.Terrain.Sample(c.Along,c.Across);
+                var c=flight.Settings.Geometry.Coordinates(point);var t=Terrain(flight.Settings,c);
                 value=t.Wet&&c.Altitude<t.WaterHeight&&c.Altitude>=t.Height-2;
             }
             else value=false;
@@ -25,10 +32,19 @@ namespace NivenRingworld.Extensions
         private void Awake(){view=GetComponent<Camera>();view.depthTextureMode|=DepthTextureMode.Depth;}
         private void OnRenderImage(RenderTexture source,RenderTexture destination)
         {
+#if RINGWORLD_FRAME_PROFILING
+            long profile=RingPerformance.Begin();
+            try{RenderWater(source,destination);}finally{RingPerformance.End(RingPerformance.Section.Underwater,profile);}
+#else
+            RenderWater(source,destination);
+#endif
+        }
+        private void RenderWater(RenderTexture source,RenderTexture destination)
+        {
             var f=RingworldFlight.Instance;
             if(f==null||!f.FrameInUse||MapView.MapIsEnabled||!f.Settings.WaterExtension||f.Settings.WaterQuality<1){Graphics.Blit(source,destination);return;}
             var s=f.Settings;var point=ConvertVector.Core((Vector3d)view.transform.position-f.Center);
-            var c=s.Geometry.Coordinates(point);var terrain=s.Terrain.Sample(c.Along,c.Across);
+            var c=s.Geometry.Coordinates(point);var terrain=Terrain(s,c);
             double depth=terrain.WaterHeight-c.Altitude;
             if(!terrain.Wet||depth<=0||c.Altitude<terrain.Height-2){Graphics.Blit(source,destination);return;}
             if(material==null)
